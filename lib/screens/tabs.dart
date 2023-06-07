@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:games_wishlist/data/dummy_data.dart';
 import 'package:games_wishlist/models/game.dart';
 import 'package:games_wishlist/screens/categories.dart';
 import 'package:games_wishlist/screens/filters.dart';
 import 'package:games_wishlist/screens/games.dart';
-import 'package:games_wishlist/widgets/main_drawer.dart';
 
-class TabScreen extends StatefulWidget{
+const kInitialFilters = {
+  Filter.dlc: false,
+  Filter.nsfw: false,
+  Filter.affordable: false,
+  Filter.review: false,
+};
+
+class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
 
   @override
@@ -14,54 +21,94 @@ class TabScreen extends StatefulWidget{
   }
 }
 
-class _TabScreenState extends State<TabScreen>{
+class _TabScreenState extends State<TabScreen> {
   int selectedPage = 0;
   final List<Game> selectedFavorites = [];
+  Map<Filter, bool> selectedFilters = kInitialFilters;
 
-  void showSnackBar(String message){
+  void showSnackBar(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void toggleFavoriteStatus(Game game){
+  void toggleFavoriteStatus(Game game) {
     final isIn = selectedFavorites.contains(game);
     setState(() {
-      if(isIn){
+      if (isIn) {
         selectedFavorites.remove(game);
         showSnackBar('Game removed from Favorites');
-      }
-      else{
+      } else {
         selectedFavorites.add(game);
         showSnackBar('Game added to Favorites');
       }
     });
   }
 
-  void setScreen(String id){
-    if(id == 'filters'){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const FilterScreen()));
-    }
-    else{
-      Navigator.of(context).pop();
+  void setScreen(String id) async {
+    Navigator.of(context).pop();
+    if (id == 'filters') {
+      final result = await Navigator.of(context).push<Map<Filter, bool>>(
+        MaterialPageRoute(
+          builder: (context) => FilterScreen(
+            currentFilters: selectedFilters,
+          ),
+        ),
+      );
+      setState(() {
+        selectedFilters = result ?? kInitialFilters;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = CategoriesScreen(onToggleFavorite: toggleFavoriteStatus, onSelectScreen: setScreen,);
+    final filteredGames = availableGames.where((game) {
+      if (selectedFilters[Filter.nsfw]! && game.isNSFW) {
+        return false;
+      }
+      if (selectedFilters[Filter.dlc]! && game.hasDLC) {
+        return false;
+      }
+      if (selectedFilters[Filter.affordable]! &&
+          game.affordability != Affordability.affordable) {
+        return false;
+      }
+      if (selectedFilters[Filter.review]! && game.reviews != Review.positive) {
+        return false;
+      }
+      return true;
+    }).toList();
+
+    Widget activePage = CategoriesScreen(
+      onToggleFavorite: toggleFavoriteStatus,
+      onSelectScreen: setScreen,
+      filteredGames: filteredGames,
+      selectedFavorites: selectedFavorites,
+    );
     String activePageTitle = 'Categories';
-    void selectPage(int index){
+
+    void selectPage(int index) {
       setState(() {
         selectedPage = index;
       });
     }
 
-    if(selectedPage == 1){
-      activePage = GamesScreen(category: 'Favorites', games: selectedFavorites, onToggleFavorite: toggleFavoriteStatus,);
+    if (selectedPage == 1) {
+      activePage = GamesScreen(
+        category: 'Favorites',
+        games: selectedFavorites,
+        onToggleFavorite: toggleFavoriteStatus,
+        selectedFavorites: selectedFavorites,
+      );
       activePageTitle = 'Your Favorites';
-    }
-    else if(selectedPage == 0){
-      activePage = CategoriesScreen(onToggleFavorite: toggleFavoriteStatus, onSelectScreen: setScreen,);
+    } else if (selectedPage == 0) {
+      activePage = CategoriesScreen(
+        onToggleFavorite: toggleFavoriteStatus,
+        onSelectScreen: setScreen,
+        filteredGames: filteredGames,
+        selectedFavorites: selectedFavorites,
+      );
     }
 
     return Scaffold(
@@ -70,10 +117,13 @@ class _TabScreenState extends State<TabScreen>{
       // ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (index){selectPage(index);},
+        onTap: (index) {
+          selectPage(index);
+        },
         currentIndex: selectedPage,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.gamepad), label: 'Categories'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.category), label: 'Categories'),
           BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Favorites'),
         ],
       ),

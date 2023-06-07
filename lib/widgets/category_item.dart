@@ -43,8 +43,6 @@ class CategoryItem extends StatelessWidget {
                 category.title,
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
                       fontSize: 23
                     ),
               ),

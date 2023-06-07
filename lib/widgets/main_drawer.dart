@@ -12,16 +12,13 @@ class MainDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withOpacity(0.8),
+                  Color.fromRGBO(9, 198, 249, 1),
+                  Color.fromRGBO(4, 93, 233, 1),
                 ],
               ),
             ),
@@ -29,11 +26,9 @@ class MainDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Game\nOn',
+                  'Greetings\nGAMER',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.white,
                         fontSize: 30,
-                        fontWeight: FontWeight.bold,
                       ),
                 ),
               ],
@@ -47,11 +42,7 @@ class MainDrawer extends StatelessWidget {
             ),
             title: Text(
               'Games',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+              style: Theme.of(context).textTheme.titleMedium
             ),
             onTap: () {onSelectScreen('games');},
           ),
@@ -63,11 +54,7 @@ class MainDrawer extends StatelessWidget {
             ),
             title: Text(
               'Filters',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+              style: Theme.of(context).textTheme.titleMedium
             ),
             onTap: () {onSelectScreen('filters');},
           )

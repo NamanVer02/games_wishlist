@@ -29,24 +29,34 @@ class GameItemTrait extends StatelessWidget {
             ),
           ],
         ),
-
-        const SizedBox(height: 8,),
-
+        const SizedBox(
+          height: 8,
+        ),
         Row(
           children: [
-            (game.hasDLC) ? const Icon(Icons.check_circle_outline) : const Icon(Icons.cancel_outlined),
-            const Text('DLC', style: TextStyle(color: Colors.white),)
+            (game.hasDLC)
+                ? const Icon(Icons.check_circle_outline)
+                : const Icon(Icons.cancel_outlined),
+            const Text(
+              'DLC',
+              style: TextStyle(color: Colors.white),
+            )
           ],
         ),
-
-        const SizedBox(height: 8,),
-
+        const SizedBox(
+          height: 8,
+        ),
         Row(
           children: [
-            (game.isNSFW) ? const Icon(Icons.check_circle_outline) : const Icon(Icons.cancel_outlined),
-            const Text('NSFW', style: TextStyle(color: Colors.white),)
+            (game.isNSFW)
+                ? const Icon(Icons.check_circle_outline)
+                : const Icon(Icons.cancel_outlined),
+            const Text(
+              'NSFW',
+              style: TextStyle(color: Colors.white),
+            )
           ],
-        )
+        ),
       ],
     );
   }

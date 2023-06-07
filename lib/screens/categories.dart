@@ -7,21 +7,23 @@ import 'package:games_wishlist/widgets/category_item.dart';
 import 'package:games_wishlist/widgets/main_drawer.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key, required this.onToggleFavorite, required this.onSelectScreen});
+  const CategoriesScreen({super.key, required this.onToggleFavorite, required this.onSelectScreen, required this.filteredGames, required this.selectedFavorites});
   final void Function(Game game) onToggleFavorite;
   final void Function(String id) onSelectScreen;
+  final List<Game> selectedFavorites;
+  final filteredGames;
 
 
   void _selectCategory(BuildContext context, Category category) {
-    final gameList = availableGames
-        .where((game) => game.categories.contains(category.id))
+    final gameList = filteredGames
+        .where((game) {return game.categories.contains(category.id) as bool;})
         .toList();
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) =>
-            GamesScreen(category: category.title, games: gameList, onToggleFavorite: onToggleFavorite,),
+            GamesScreen(category: category.title, games: gameList, onToggleFavorite: onToggleFavorite, selectedFavorites: selectedFavorites,),
       ),
     );
   }
@@ -32,16 +34,12 @@ class CategoriesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Categories',
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       drawer: MainDrawer(onSelectScreen: onSelectScreen),
       body: GridView(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 15,

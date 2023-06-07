@@ -5,16 +5,17 @@ import 'package:games_wishlist/widgets/game_item_traits.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class GameItem extends StatelessWidget {
-  const GameItem({super.key, required this.game, required this.onToggleFavorite});
+  const GameItem({super.key, required this.game, required this.onToggleFavorite, required this.selectedFavorites});
 
   final Game game;
   final void Function(Game game) onToggleFavorite;
+  final List<Game> selectedFavorites;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 10,
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(15),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
@@ -22,7 +23,7 @@ class GameItem extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => GameDetailsScreen(game: game, onToggleFavorite: onToggleFavorite,),
+              builder: (ctx) => GameDetailsScreen(game: game, onToggleFavorite: onToggleFavorite, selectedFavorites: selectedFavorites,),
             ),
           );
         },

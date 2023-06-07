@@ -23,6 +23,7 @@ class Game{
     required this.categories,
     required this.hasDLC,
     required this.isNSFW,
+    required this.description
   });
 
   final String id;
@@ -34,4 +35,5 @@ class Game{
   final Affordability affordability;
   final bool hasDLC;
   final bool isNSFW;
+  final String description;
 }
