@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:games_wishlist/data/dummy_data.dart';
 import 'package:games_wishlist/models/category.dart';
 import 'package:games_wishlist/models/game.dart';
+import 'package:games_wishlist/widgets/game_item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class GameDetailsScreen extends StatefulWidget {
@@ -9,11 +10,13 @@ class GameDetailsScreen extends StatefulWidget {
       {super.key,
       required this.game,
       required this.onToggleFavorite,
-      required this.selectedFavorites});
+      required this.selectedFavorites,
+      required this.sameGames});
 
   final Game game;
   final void Function(Game game) onToggleFavorite;
   final List<Game> selectedFavorites;
+  final List<Game> sameGames;
 
   @override
   State<GameDetailsScreen> createState() => _GameDetailsScreenState();
@@ -32,13 +35,12 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
       } else {
         isFavorite = false;
       }
-    });
-    for (final category in availableCategories) {
-      if (widget.game.categories.contains(category.id)) {
-        gameCategories.add(category);
+      for(final category in availableCategories){
+        if(widget.game.categories.contains(category.id)){
+          gameCategories.add(category);
+        }
       }
-    }
-    ;
+    });
   }
 
   void checkFavorite(Game game) {
@@ -71,24 +73,24 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Container(
-              //padding: const EdgeInsets.all(10),
-              child: ClipRRect(
-                //borderRadius: const BorderRadius.all(Radius.circular(16),),
-                child: FadeInImage(
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: NetworkImage(widget.game.imageURL),
-                ),
+      body: Column(
+        children: [
+          Container(
+            //padding: const EdgeInsets.all(10),
+            child: ClipRRect(
+              //borderRadius: const BorderRadius.all(Radius.circular(16),),
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(widget.game.imageURL),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
@@ -116,6 +118,26 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                   child: Text('NSFW',
                       style: Theme.of(context).textTheme.titleSmall),
                 ),
+                const SizedBox(
+                  width: 15,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
+                    color: (widget.game.reviews == Review.positive)
+                        ? Colors.green.withOpacity(0.7)
+                        : Colors.red,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon((widget.game.reviews == Review.positive) ? Icons.thumb_up_sharp : Icons.thumb_down_sharp),
+                      const SizedBox(width: 7,),
+                      Text('Reviews',
+                          style: Theme.of(context).textTheme.titleSmall),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -128,10 +150,13 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -140,13 +165,15 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                     widget.game.description,
                   ),
                 ),
-                const SizedBox(width: 20,),
+                const SizedBox(
+                  width: 20,
+                ),
                 Column(
                   children: [
                     for (final category in gameCategories)
                       Container(
                         width: 80,
-                        height: 25,
+                        height: 30,
                         margin: const EdgeInsets.symmetric(vertical: 3),
                         decoration: BoxDecoration(
                           borderRadius:
@@ -158,17 +185,36 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
                         ),
                         child: Center(
                           child: Text(category.title,
-                          textAlign: TextAlign.justify,
                               style: Theme.of(context).textTheme.bodyMedium),
-                              
                         ),
                       ),
                   ],
                 )
               ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          Text(
+            'More Relevant Games',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          SizedBox(
+            height: 210,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.sameGames.length,
+              itemBuilder: (context, index) => GameItem(
+                  game: widget.sameGames[index],
+                  onToggleFavorite: widget.onToggleFavorite,
+                  selectedFavorites: widget.selectedFavorites),
+            ),
+          )
+        ],
       ),
     );
   }

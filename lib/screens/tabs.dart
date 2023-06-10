@@ -4,6 +4,7 @@ import 'package:games_wishlist/models/game.dart';
 import 'package:games_wishlist/screens/categories.dart';
 import 'package:games_wishlist/screens/filters.dart';
 import 'package:games_wishlist/screens/games.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const kInitialFilters = {
   Filter.dlc: false,
@@ -90,7 +91,7 @@ class _TabScreenState extends State<TabScreen> {
 
     void selectPage(int index) {
       setState(() {
-        selectedPage = index;
+        selectedPage = index; 
       });
     }
 
