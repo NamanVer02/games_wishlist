@@ -1,6 +1,6 @@
-# Game Catalog App
+# Game Wishlist App
 
-The Game Catalog app is a Flutter-based mobile application that allows users to browse and manage their favorite games. It provides a user-friendly interface to view game details, apply filters, and add games to a favorites list.
+The Game Wishlist app is a Flutter-based mobile application that allows users to browse and manage their favorite games. It provides a user-friendly interface to view game details, apply filters, and add games to a favorites list.
 
 ## Features
 
@@ -12,7 +12,7 @@ The Game Catalog app is a Flutter-based mobile application that allows users to 
 
 ## Getting Started
 
-To run the Game Catalog app on your device, follow these steps:
+To run the Game Wishlist app on your device, follow these steps:
 
 1. Clone this repository.
 2. Make sure you have the Flutter SDK installed on your machine.
@@ -21,6 +21,6 @@ To run the Game Catalog app on your device, follow these steps:
 
 ## Feedback
 
-We value your feedback! If you have any questions, suggestions, or encounter any issues while using the Game Catalog app, please don't hesitate to reach out to us at [insert contact information]. Your feedback will help us improve the app and provide a better experience for all users.
+We value your feedback! If you have any questions, or suggestions, or encounter any issues while using the Game Wishlist app, please don't hesitate to reach out to us at [insert contact information]. Your feedback will help us improve the app and provide a better experience for all users.
 
-Thank you for using the Game Catalog app! We hope you enjoy exploring and discovering new games while keeping track of your favorites.
+Thank you for using the Game Wishlist app! We hope you enjoy exploring and discovering new games while keeping track of your favorites.
